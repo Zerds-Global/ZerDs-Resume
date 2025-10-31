@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZerDs Resume</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a2d9a6c51f.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Comfortaa:wght@400&family=Georgia&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Global Styles */
+    :root {
+      --primary-color: #007bff;
+      /* Bootstrap primary blue */
+      --secondary-color: #6c757d;
+      /* Bootstrap secondary gray */
+      --accent-color: #28a745;
+      /* Green for success/add actions */
+      --danger-color: #dc3545;
+      /* Red for delete actions */
+      --info-color: #17a2b8;
+      /* Info blue */
+
+      /* Dark Mode Variables */
+      --dark-bg: #1a1a2e;
+      /* Deeper, richer dark background */
+      --dark-card-bg: #21213b;
+      /* Slightly lighter for cards */
+      --dark-text: #e0e0e0;
+      --dark-header-bg: linear-gradient(90deg, #2a2a4a, #4a4a6e);
+      /* More elegant gradient */
+      --dark-border: #333355;
+      --dark-input-bg: #2d2d4d;
+      --dark-placeholder-text: #a0a0c0;
+      --dark-link-color: #8ab4f8;
+      /* Lighter link for dark mode */
+
+      /* Light Mode Variables */
+      --light-bg: #f8f9fa;
+      /* Softer light background */
+      --light-card-bg: #ffffff;
+      --light-text: #333333;
+      --light-header-bg: linear-gradient(90deg, #007bff, #6f42c1);
+      /* Bootstrap primary to purple */
+      --light-border: #e9ecef;
+      --light-input-bg: #fdfdfd;
+      --light-placeholder-text: #6c757d;
+      --light-link-color: #007bff;
+      /* Standard link for light mode */
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      font-family: "Poppins", sans-serif;
+      color: var(--dark-text);
+      transition: background-color 0.4s ease, color 0.4s ease;
+      min-height: 100vh;
+      /* Ensure body takes full height */
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.light-mode {
+      background-color: var(--light-bg);
+      color: var(--light-text);
+    }
+
+    a {
+      color: var(--dark-link-color);
+      transition: color 0.3s ease;
+    }
+
+    body.light-mode a {
+      color: var(--light-link-color);
+    }
+
+    a:hover {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+
+    /* Header */
+    .header {
+      background: var(--dark-header-bg);
+      color: white;
+      text-align: center;
+      padding: 1.5rem 1rem;
+      /* More generous padding */
+      margin-bottom: 25px;
+      /* Increased margin below header */
+      transition: background 0.4s ease;
+      position: relative;
+      /* For theme toggle positioning */
+      border-bottom-left-radius: 15px;
+      /* Rounded corners */
+      border-bottom-right-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    body.light-mode .header {
+      background: var(--light-header-bg);
+    }
+
+    .header h2 {
+      font-weight: 700;
+      /* Bolder heading */
+      margin-bottom: 0.6rem;
+      font-size: 2.2rem;
+      /* Larger heading */
+      letter-spacing: 0.05em;
+    }
+
+    .header p {
+      font-size: 1rem;
+      /* Slightly larger paragraph */
+      opacity: 0.95;
+    }
+
+    /* Builder Container */
+    .builder-container {
+      flex: 1;
+      /* Allow container to grow and take available space */
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      /* Increased gap */
+      padding: 0 15px 25px 15px;
+      /* Padding for entire container */
+      max-width: 1300px;
+      /* Max width for content */
+      margin: 0 auto;
+      /* Center the container */
+    }
+
+    /* Form and Preview Sections */
+    .form-section,
+    .preview-section {
+      flex: 1 1 calc(50% - 0.75rem);
+      /* Adjust flex basis for gap */
+      background: var(--dark-card-bg);
+      border-radius: 15px;
+      /* More rounded corners */
+      padding: 30px;
+      /* More generous padding */
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      /* Softer, deeper shadow */
+      max-height: 85vh;
+      /* Adjusted for overall header/footer space */
+      overflow-y: auto;
+      transition: background 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
+      border: 1px solid var(--dark-border);
+      /* Subtle border */
+    }
+
+    body.light-mode .form-section,
+    body.light-mode .preview-section {
+      background: var(--light-card-bg);
+      color: var(--light-text);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--light-border);
+    }
+
+    .form-section h4 {
+      color: var(--primary-color);
+      font-weight: 700;
+      /* Bolder sub-heading */
+      margin-bottom: 1.8rem;
+      font-size: 1.7rem;
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+
+    .form-section h5 {
+      font-weight: 600;
+      /* Bolder section headings */
+      margin-top: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--dark-text);
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    body.light-mode .form-section h5 {
+      color: var(--light-text);
+    }
+
+    /* Input and Textarea Styles */
+    .form-label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+      color: var(--dark-text);
+    }
+
+    body.light-mode .form-label {
+      color: var(--light-text);
+    }
+
+    .form-control {
+      background-color: var(--dark-input-bg);
+      border: 1px solid var(--dark-border);
+      color: var(--dark-text);
+      padding: 0.7rem 1.1rem;
+      /* More comfortable padding */
+      border-radius: 10px;
+      /* Slightly more rounded */
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-control::placeholder {
+      color: var(--dark-placeholder-text);
+      opacity: 0.8;
+    }
+
+    .form-control:focus {
+      background-color: var(--dark-input-bg);
+      color: var(--dark-text);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.3rem rgba(0, 123, 255, 0.3);
+      /* Softer, primary color shadow */
+      outline: none;
+      /* Remove default outline */
+    }
+
+    body.light-mode .form-control {
+      background-color: var(--light-input-bg);
+      border-color: var(--light-border);
+      color: var(--light-text);
+    }
+
+    body.light-mode .form-control::placeholder {
+      color: var(--light-placeholder-text);
+    }
+
+    body.light-mode .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.3rem rgba(0, 123, 255, 0.3);
+    }
+
+    textarea.form-control {
+      min-height: 80px;
+      /* Taller default for summary */
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    .form-control.mb-2,
+    .form-control.mb-3 {
+      margin-bottom: 15px !important;
+    }
+
+
+    /* Buttons */
+    .btn {
+      border-radius: 8px;
+      /* Consistent rounded buttons */
+      font-weight: 500;
+      padding: 0.65rem 1.3rem;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn-sm {
+      padding: 0.3rem 0.75rem;
+      font-size: 0.85rem;
+      border-radius: 6px;
+    }
+
+    .btn-dark {
+      background-color: #555577;
+      /* Softer dark button */
+      border-color: #555577;
+      color: white;
+    }
+
+    .btn-dark:hover {
+      background-color: #6a6ab0;
+      border-color: #6a6ab0;
+      color: white;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+      border-color: #5a6268;
+      color: white;
+    }
+
+    .btn-outline-danger {
+      color: var(--danger-color);
+      border-color: var(--danger-color);
+      background-color: transparent;
+    }
+
+    .btn-outline-danger:hover {
+      background-color: var(--danger-color);
+      color: white;
+      border-color: var(--danger-color);
+    }
+
+    .btn-custom {
+      background-color: var(--primary-color);
+      /* Use primary for main action */
+      color: white;
+      border-radius: 50px;
+      /* More distinct pill shape for download */
+      font-weight: 600;
+      padding: 0.9rem 1.8rem;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    }
+
+    .btn-custom:hover {
+      background-color: #0056b3;
+      box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+    }
+
+    .section-controls button {
+      margin-top: 8px;
+      margin-bottom: 5px;
+      padding: 0.4rem 0.9rem;
+      /* Smaller padding for control buttons */
+      font-size: 0.85rem;
+      border-radius: 6px;
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+    }
+
+    .section-controls button:hover {
+      background-color: #5a6268;
+      border-color: #5a6268;
+    }
+
+    .section-controls .btn-danger {
+      background-color: var(--danger-color);
+      border-color: var(--danger-color);
+    }
+
+    .section-controls .btn-danger:hover {
+      background-color: #c82333;
+      border-color: #bd2130;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: absolute;
+      top: 1.5rem;
+      /* Aligned with header padding */
+      right: 1.5rem;
+      /* Aligned with header padding */
+      border-radius: 50%;
+      /* Circular button */
+      width: 50px;
+      /* Fixed width for circle */
+      height: 50px;
+      /* Fixed height for circle */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      background-color: rgba(255, 255, 255, 0.18);
+      /* Semi-transparent in dark */
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    body.light-mode .theme-toggle {
+      background-color: rgba(0, 0, 0, 0.1);
+      /* Semi-transparent in light */
+      color: var(--light-text);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .theme-toggle:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    body.light-mode .theme-toggle:hover {
+      background-color: rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Media query for smaller screens */
+    @media (max-width: 768px) {
+      .builder-container {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .form-section,
+      .preview-section {
+        max-height: none;
+        /* Remove fixed height on smaller screens */
+        overflow-y: visible;
+        flex: 1 1 100%;
+      }
+
+      .theme-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+        top: 1rem;
+        right: 1rem;
+      }
+
+      .header h2 {
+        font-size: 1.8rem;
+      }
+
+      .header p {
+        font-size: 0.9rem;
+      }
+
+      .form-section h4 {
+        font-size: 1.5rem;
+      }
+
+      .form-section h5 {
+        font-size: 1.1rem;
+      }
+    }
+
+
+    /* Resume Preview Specific Styles */
+    .resume-template {
+      padding: 25px;
+      /* More internal padding for aesthetics */
+      min-height: 297mm;
+      /* Standard A4 height */
+      box-sizing: border-box;
+      /* Include padding in height */
+      font-size: 15px;
+      /* Slightly larger base font */
+      line-height: 1.4;
+      letter-spacing: 0.01em;
+      color: var(--dark-text);
+      transition: all 0.4s ease;
+      /* Smooth transition for template changes */
+      word-wrap: break-word;
+      /* Ensure long words wrap */
+    }
+
+    .resume-template h2 {
+      font-size: 1.5rem;
+      /* More prominent headings */
+      margin-top: 1.8rem;
+      margin-bottom: 0.7rem;
+      line-height: 1.2;
+      border-bottom: 2px solid var(--primary-color);
+      /* Stronger, primary color border */
+      padding-bottom: 0.4rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      /* Highlight section titles */
+      letter-spacing: 0.04em;
+    }
+
+    body.light-mode .resume-template h2 {
+      border-bottom-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .resume-template p,
+    .resume-template div,
+    .resume-template span,
+    .resume-template ul,
+    .resume-template li {
+      margin-bottom: 0.4rem !important;
+      /* Tighter line spacing for content */
+      margin-top: 0 !important;
+      padding: 0 !important;
+      line-height: 1.4 !important;
+    }
+
+    .resume-template hr {
+      border-top: 1px solid var(--dark-border);
+      margin: 1.2rem 0;
+      /* More spacing for horizontal rules */
+      opacity: 0.7;
+    }
+
+    body.light-mode .resume-template hr {
+      border-top-color: var(--light-border);
+      opacity: 1;
+    }
+
+    .resume-image {
+      width: 130px;
+      /* Larger image */
+      height: 130px;
+      border: 5px solid var(--primary-color);
+      /* Thicker, primary color border */
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      /* More pronounced shadow */
+      margin-bottom: 12px;
+      object-fit: cover;
+    }
+
+    body.light-mode .resume-image {
+      border-color: var(--primary-color);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .profile-row {
+      margin-bottom: 15px;
+    }
+
+    #topName {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--dark-text);
+      line-height: 1.1;
+    }
+
+    body.light-mode #topName {
+      color: var(--light-text);
+    }
+
+    #previewTitle {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--secondary-color);
+      margin-bottom: 1rem !important;
+      text-align: center;
+    }
+
+    #previewSummary {
+      text-align: left !important;
+      padding-left: 0 !important;
+      /* Remove specific padding for more general styling */
+      width: 100%;
+      margin-left: 0;
+      min-height: 30px;
+      font-size: 0.95rem;
+      color: var(--dark-text);
+    }
+
+    body.light-mode #previewSummary {
+      color: var(--light-text);
+    }
+
+
+    .info-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      /* More space between items */
+      margin-bottom: 15px;
+      /* Increased margin */
+      font-size: 0.9rem;
+    }
+
+    .info-row a,
+    .info-row span {
+      text-decoration: none;
+      color: var(--dark-text);
+      font-size: 0.9rem;
+      padding: 5px 12px;
+      /* More padding for a softer look */
+      border-radius: 20px;
+      /* Pill shape */
+      background: var(--dark-input-bg);
+      /* Use input background for info bubbles */
+      display: inline-flex;
+      /* Use flex for icon alignment */
+      align-items: center;
+      gap: 5px;
+      /* Space between icon and text */
+      transition: background 0.3s ease, color 0.3s ease;
+      border: 1px solid var(--dark-border);
+    }
+
+    body.light-mode .info-row a,
+    body.light-mode .info-row span {
+      background: var(--light-input-bg);
+      color: var(--light-text);
+      border: 1px solid var(--light-border);
+    }
+
+    .info-row a:hover {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    body.light-mode .info-row a:hover {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .info-row i {
+      margin-right: 0;
+      /* Reset margin for better gap control */
+    }
+
+    .template-dropdown {
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      background-color: var(--dark-input-bg);
+      color: var(--dark-text);
+      border-color: var(--dark-border);
+      padding: 0.7rem 1.1rem;
+    }
+
+    body.light-mode .template-dropdown {
+      background-color: var(--light-input-bg);
+      color: var(--light-text);
+      border-color: var(--light-border);
+    }
+
+    .template-dropdown option {
+      background-color: var(--dark-input-bg);
+      /* Ensure options match theme */
+      color: var(--dark-text);
+    }
+
+    body.light-mode .template-dropdown option {
+      background-color: var(--light-input-bg);
+      color: var(--light-text);
+    }
+
+
+    /* Specific Resume Template Styles - Refined */
+    .black-template {
+      background: #181825;
+      /* Darker, richer */
+      color: #f0f0f0;
+      border-radius: 12px;
+    }
+
+    .black-template h2 {
+      border-bottom-color: #6a6a99;
+      color: #9bbff9;
+    }
+
+    .black-template .resume-image {
+      border-color: #9bbff9;
+    }
+
+    .black-template .info-row a,
+    .black-template .info-row span {
+      background: #2f2f4d;
+      color: #d0d0ee;
+      border-color: #44446a;
+    }
+
+    .black-template .info-row a:hover {
+      background: #9bbff9;
+      color: #181825;
+      border-color: #9bbff9;
+    }
+
+    .classic-template {
+      background: #fefefe;
+      color: #212529;
+      border-left: 10px solid var(--primary-color);
+      /* Thicker border */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .classic-template h2 {
+      border-bottom-color: #ced4da;
+      color: var(--primary-color);
+    }
+
+    .classic-template .resume-image {
+      border-color: var(--primary-color);
+    }
+
+    .classic-template .info-row a,
+    .classic-template .info-row span {
+      background: #eaf0fe;
+      color: #333;
+      border-color: #dbe4f7;
+    }
+
+    .classic-template .info-row a:hover {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .modern-template {
+      background: #f7faff;
+      color: #212529;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-right: 8px solid #007bff;
+    }
+
+    .modern-template h2 {
+      border-bottom-color: #a7d9ff;
+      color: #007bff;
+    }
+
+    .modern-template .resume-image {
+      border-color: #007bff;
+    }
+
+    .modern-template .info-row a,
+    .modern-template .info-row span {
+      background: #e0f2ff;
+      color: #0056b3;
+      border-color: #b3e0ff;
+    }
+
+    .modern-template .info-row a:hover {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+
+    .canvas-template {
+      background: #2a2a3a;
+      /* Darker gray-blue */
+      color: #e0e0e0;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      border-left: 6px solid #f0ad4e;
+      /* Orange accent */
+    }
+
+    .canvas-template h2 {
+      border-bottom-color: #f0ad4e;
+      color: #f0ad4e;
+    }
+
+    .canvas-template .resume-image {
+      border-color: #f0ad4e;
+    }
+
+    .canvas-template .info-row a,
+    .canvas-template .info-row span {
+      background: #3d3d57;
+      color: #e0e0e0;
+      border-color: #555577;
+    }
+
+    .canvas-template .info-row a:hover {
+      background: #f0ad4e;
+      color: #2a2a3a;
+      border-color: #f0ad4e;
+    }
+
+    .creative-template {
+      background: linear-gradient(135deg, #a8dadc 40%, #f1faee 100%);
+      /* Softer, complementary colors */
+      color: #1d3557;
+      /* Dark blue text */
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .creative-template h2 {
+      border-bottom-color: #457b9d;
+      color: #1d3557;
+    }
+
+    .creative-template .resume-image {
+      border-color: #1d3557;
+    }
+
+    .creative-template .info-row a,
+    .creative-template .info-row span {
+      background: #e0f0f5;
+      color: #1d3557;
+      border-color: #c0e0e8;
+    }
+
+    .creative-template .info-row a:hover {
+      background: #457b9d;
+      color: white;
+      border-color: #457b9d;
+    }
+
+    .bold-template {
+      background: #2c3e50;
+      /* Darker, richer navy */
+      color: #ecf0f1;
+      /* Light gray text */
+      border-radius: 10px;
+      font-weight: 600;
+      border-top: 8px solid #f39c12;
+      /* Strong orange accent */
+    }
+
+    .bold-template h2 {
+      border-bottom-color: #f39c12;
+      color: #f39c12;
+    }
+
+    .bold-template .resume-image {
+      border-color: #f39c12;
+    }
+
+    .bold-template .info-row a,
+    .bold-template .info-row span {
+      background: #34495e;
+      color: #ecf0f1;
+      border-color: #4a6278;
+    }
+
+    .bold-template .info-row a:hover {
+      background: #f39c12;
+      color: #2c3e50;
+      border-color: #f39c12;
+    }
+
+    .elegant-template {
+      background: #fdfdfd;
+      color: #343a40;
+      /* Darker text */
+      border-left: 6px dotted #6c757d;
+      /* Soft gray dotted */
+      font-family: 'Georgia', serif;
+      /* Classic serif font */
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .elegant-template h2 {
+      border-bottom-color: #adb5bd;
+      color: #495057;
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* More elegant heading font */
+    .elegant-template .resume-image {
+      border-color: #adb5bd;
+    }
+
+    .elegant-template .info-row a,
+    .elegant-template .info-row span {
+      background: #e9ecef;
+      color: #495057;
+      border-color: #ced4da;
+    }
+
+    .elegant-template .info-row a:hover {
+      background: #6c757d;
+      color: white;
+      border-color: #6c757d;
+    }
+
+    .minimal-template {
+      background: #fff;
+      color: #343a40;
+      border: 1px dashed #adb5bd;
+      /* Softer dashed border */
+      box-shadow: none;
+    }
+
+    .minimal-template h2 {
+      border-bottom-color: #adb5bd;
+      color: #343a40;
+    }
+
+    .minimal-template .resume-image {
+      border-color: #adb5bd;
+    }
+
+    .minimal-template .info-row a,
+    .minimal-template .info-row span {
+      background: #f8f9fa;
+      color: #343a40;
+      border-color: #e9ecef;
+    }
+
+    .minimal-template .info-row a:hover {
+      background: #6c757d;
+      color: white;
+      border-color: #6c757d;
+    }
+
+    .casual-template {
+      background: #fffdf5;
+      /* Creamy background */
+      color: #5d4037;
+      /* Warm brown text */
+      font-family: 'Comfortaa', cursive;
+      /* More playful, legible cursive */
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .casual-template h2 {
+      border-bottom-color: #bcaaa4;
+      color: #795548;
+    }
+
+    .casual-template .resume-image {
+      border-color: #795548;
+    }
+
+    .casual-template .info-row a,
+    .casual-template .info-row span {
+      background: #edebe4;
+      color: #5d4037;
+      border-color: #dcd7c0;
+    }
+
+    .casual-template .info-row a:hover {
+      background: #795548;
+      color: #fffdf5;
+      border-color: #795548;
+    }
+
+    .trend-template {
+      background: linear-gradient(90deg, #1e90ff 60%, #00cec9 100%);
+      /* Brighter, more dynamic gradient */
+      color: #fff;
+      box-shadow: 0 0 10px rgba(30, 144, 255, 0.4);
+      border-radius: 12px;
+    }
+
+    .trend-template h2 {
+      border-bottom-color: rgba(255, 255, 255, 0.4);
+      color: white;
+    }
+
+    .trend-template .resume-image {
+      border-color: white;
+    }
+
+    .trend-template .info-row a,
+    .trend-template .info-row span {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h2><i class="fa-solid fa-file-pen me-2"></i>ZerDs Resume Builder</h2>
+    <button class="btn btn-outline-light theme-toggle" id="themeToggle" title="Switch Theme">🌙</button>
+    <p class="mb-0">Build and style your professional resume easily – fully responsive and editable.</p>
+  </div>
+  <div class="container-fluid builder-container">
+    <div class="form-section">
+      <h4 class="text-center text-primary mb-3">Resume Information</h4>
+      <form id="resumeForm">
+        <h5>Photo</h5>
+        <input type="file" id="profileImageInput" class="form-control mb-3" accept="image/*">
+        <h5>Personal Info</h5>
+        <input type="text" id="name" class="form-control mb-2" placeholder="Full Name">
+        <input type="text" id="title" class="form-control mb-2" placeholder="Job Title">
+        <div>
+          <label for="summary" class="form-label">Summary</label>
+          <textarea id="summary" class="form-control" rows="4" placeholder="Write a short summary about yourself..."></textarea>
+          </div><br>
+        <input type="email" id="email" class="form-control mb-2" placeholder="Email">
+        <input type="text" id="phone" class="form-control mb-2" placeholder="Phone">
+        <input type="text" id="address" class="form-control mb-2" placeholder="Address">
+        <input type="url" id="linkedin" class="form-control mb-2" placeholder="LinkedIn URL">
+        <input type="url" id="github" class="form-control mb-2" placeholder="GitHub URL">
+        <input type="url" id="portfolio" class="form-control mb-3" placeholder="Portfolio / Website URL">
+        <h5>Education <button type="button" id="addEducation" class="btn btn-sm btn-dark ms-2 mb-1">+ Add</button></h5>
+        <div id="educationList" class="section-list"></div>
+        <h5>Experience / Internship <button type="button" id="addExperience" class="btn btn-sm btn-dark ms-2 mb-1">+
+            Add</button></h5>
+        <div id="experienceList" class="section-list"></div>
+        <h5>Skills</h5>
+        <input type="text" id="skills" class="form-control mb-3" placeholder="e.g., HTML, CSS, JS">
+        <h5>Projects <button type="button" id="addProject" class="btn btn-sm btn-dark ms-2 mb-1">+ Add</button></h5>
+        <div id="projectList" class="section-list"></div>
+        <h5>Certificates <button type="button" id="addCertificate" class="btn btn-sm btn-dark ms-2 mb-1">+ Add</button>
+        </h5>
+        <div id="certificateList" class="section-list"></div>
+        <h5>Template Style</h5>
+        <select id="templateSelect" class="form-select template-dropdown">
+          <option value="black">Black </option>
+          <option value="classic">Classic (Default)</option>
+          <option value="modern">Modern</option>
+          <option value="canvas">Canvas</option>
+          <option value="creative">Creative</option>
+          <option value="bold">Bold</option>
+          <option value="elegant">Elegant</option>
+          <option value="minimal">Minimal</option>
+          <option value="casual">Casual</option>
+          <option value="trend">Trendy</option>
+          <option value="professional">Professional</option>
+          <option value="neutral">Neutral</option>
+          <option value="pastel">Pastel</option>
+        </select>
+        <div class="d-grid gap-2">
+          <button type="button" id="saveDraft" class="btn btn-secondary">Save Draft</button>
+          <button type="button" id="clearData" class="btn btn-outline-danger">Clear All</button>
+          <button type="button" id="downloadPDF" class="btn btn-custom">Download Resume</button>
+        </div>
+      </form>
+    </div>
+    <div class="preview-section" id="resumePreview">
+      <div id="resumeContent" class="resume-template black-template">
+        <div class="profile-row">
+          <img id="previewImage" class="resume-image" src="" alt="Resume Photo" style="display:none;" />
+        </div>
+        <div id="topName" style="text-align: center; font-weight: 600; font-size: 20px;">Your Name</div>
+        <div id="infoInline" class="info-row"></div>
+        <p id="previewTitle" class="fw-semibold mb-1" style="text-align:center;"></p>
+        <div id="previewSummary" class="text-muted"></div>
+        <hr>
+        <div id="previewContact"></div>
+        <h2>Education</h2>
+        <div id="previewEducation"></div>
+        <h2>Experience / Internship</h2>
+        <div id="previewExperience"></div>
+        <h2>Skills</h2>
+        <p id="previewSkills"></p>
+        <h2>Projects</h2>
+        <div id="previewProjects"></div>
+        <h2>Certificates</h2>
+        <div id="previewCertificates"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Rich Text Formatting for summary
+    function formatSummary(command, value) {
+      let editor = document.getElementById('summary');
+      editor.focus();
+      if (command === "fontSize" || command === "fontName") {
+        document.execCommand(command, false, value);
+      } else {
+        document.execCommand(command, false, null);
+      }
+      updatePreview();
+    }
+    // Data Arrays
+    let educationArr = [], experienceArr = [], projectsArr = [], certificateArr = [];
+    function renderSection(section, arr, placeholder) {
+      let html = "";
+      if (section === "project") {
+        arr.forEach((item, idx) => {
+          html += `<div class="section-item">
+            <textarea rows="2" class="form-control mb-1" oninput="updateArray('project', ${idx}, this.value, 'desc')" placeholder="Project Name & Desc.">${item.desc || ""}</textarea>
+            <input class="form-control mb-1" value="${item.link || ""}" oninput="updateArray('project',${idx},this.value,'link')" placeholder="Source code / Live Link (URL)">
+            <input class="form-control mb-1" value="${item.label || 'Source code'}" oninput="updateArray('project',${idx},this.value,'label')" placeholder="Link Name (eg. Source code)">
+            <div class="section-controls">
+              <button type="button" class="btn btn-sm btn-secondary" onclick="deleteItem('project', ${idx})">Delete</button>
+            </div>
+          </div>`;
+        });
+      } else if (section === "certificate") {
+        arr.forEach((item, idx) => {
+          html += `<div class="section-item">
+            <input class="form-control mb-1" value="${item.name || ""}" oninput="updateArray('certificate', ${idx}, this.value, 'name')" placeholder="Certificate Name">
+            <input class="form-control mb-1" value="${item.org || ""}" oninput="updateArray('certificate', ${idx}, this.value, 'org')" placeholder="Organization">
+            <input class="form-control mb-1" value="${item.date || ""}" oninput="updateArray('certificate', ${idx}, this.value, 'date')" placeholder="Date (e.g., 2022)">
+            <div class="section-controls">
+              <button type="button" class="btn btn-sm btn-secondary" onclick="deleteItem('certificate', ${idx})">Delete</button>
+            </div>
+          </div>`;
+        });
+      } else {
+        arr.forEach((item, idx) => {
+          html += `<div class="section-item">
+            <textarea rows="2" class="form-control mb-1" oninput="updateArray('${section}', ${idx}, this.value)" placeholder="${placeholder}">${item}</textarea>
+            <div class="section-controls">
+              <button type="button" class="btn btn-sm btn-secondary" onclick="deleteItem('${section}', ${idx})">Delete</button>
+            </div>
+          </div>`;
+        });
+      }
+      document.getElementById(section + "List").innerHTML = html;
+      updatePreview();
+    }
+
+    window.updateArray = function (section, idx, value, field) {
+      if (section === "education") educationArr[idx] = value;
+      if (section === "experience") experienceArr[idx] = value;
+      if (section === "project") {
+        if (!projectsArr[idx]) projectsArr[idx] = { desc: "", link: "", label: "Source code" };
+        if (field === "desc") projectsArr[idx].desc = value;
+        if (field === "link") projectsArr[idx].link = value;
+        if (field === "label") projectsArr[idx].label = value;
+      }
+      if (section === "certificate") {
+        if (!certificateArr[idx]) certificateArr[idx] = { name: "", org: "", date: "" };
+        if (field === "name") certificateArr[idx].name = value;
+        if (field === "org") certificateArr[idx].org = value;
+        if (field === "date") certificateArr[idx].date = value;
+      }
+      updatePreview();
+    };
+    window.deleteItem = function (section, idx) {
+      if (section === "education") educationArr.splice(idx, 1);
+      if (section === "experience") experienceArr.splice(idx, 1);
+      if (section === "project") projectsArr.splice(idx, 1);
+      if (section === "certificate") certificateArr.splice(idx, 1);
+      let placeholder = section === "education" ? "e.g., B.Tech CSE - XYZ University" :
+        section === "experience" ? "e.g., Software Intern - ABC Corp (2022)" : "";
+      renderSection(section, section === "education" ? educationArr :
+        section === "experience" ? experienceArr :
+          section === "project" ? projectsArr : certificateArr, placeholder);
+    };
+    document.getElementById("addEducation").onclick = () => {
+      educationArr.push("");
+      renderSection("education", educationArr, "e.g., B.Tech CSE - XYZ University");
+    };
+    document.getElementById("addExperience").onclick = () => {
+      experienceArr.push("");
+      renderSection("experience", experienceArr, "e.g., Software Intern - ABC Corp (2022)");
+    };
+    document.getElementById("addProject").onclick = () => {
+      projectsArr.push({ desc: "", link: "", label: "Source code" });
+      renderSection("project", projectsArr, "");
+    };
+    document.getElementById("addCertificate").onclick = () => {
+      certificateArr.push({ name: "", org: "", date: "" });
+      renderSection("certificate", certificateArr, "");
+    };
+    document.getElementById("profileImageInput").addEventListener("change", function () {
+      const file = this.files[0];
+      const previewImg = document.getElementById("previewImage");
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          previewImg.src = e.target.result;
+          previewImg.style.display = "block";
+          localStorage.setItem("profileImage", e.target.result);
+          updatePreview();
+        };
+        reader.readAsDataURL(file);
+      } else {
+        previewImg.src = "";
+        previewImg.style.display = "none";
+        localStorage.removeItem("profileImage");
+        updatePreview();
+      }
+    });
+    // Watch input fields (except summary)
+    const inputIds = ["name", "title", "email", "phone", "address", "linkedin", "github", "portfolio", "skills"];
+    inputIds.forEach(id => document.getElementById(id).addEventListener("input", updatePreview));
+    // Watch summary contenteditable for changes
+    document.getElementById('summary').addEventListener('input', updatePreview);
+
+    document.getElementById("templateSelect").addEventListener("change", e => {
+      changeResumeTemplate(e.target.value);
+      localStorage.setItem("templateStyle", e.target.value);
+      updatePreview();
+    });
+    function changeResumeTemplate(value) {
+      const resumeEl = document.getElementById("resumeContent");
+      let templateClass = value + "-template";
+      resumeEl.className = "resume-template " + templateClass;
+    }
+    function updatePreview() {
+      const nameVal = document.getElementById("name").value.trim() || "Your Name";
+      const image = document.getElementById("previewImage");
+      const imgData = localStorage.getItem("profileImage");
+      // Info row: urls, email, phone
+      const infoArr = [
+        { id: "linkedin", icon: "linkedin", label: "LinkedIn", type: "url" },
+        { id: "github", icon: "github", label: "GitHub", type: "url" },
+        { id: "portfolio", icon: "globe", label: "Portfolio", type: "url" },
+        { id: "email", icon: "envelope", label: false, type: "email" },
+        { id: "phone", icon: "phone", label: false, type: "phone" }
+      ];
+      let infoLine = "";
+      infoArr.forEach(obj => {
+        const val = document.getElementById(obj.id).value.trim();
+        if (val) {
+          if (obj.type == "url") {
+            infoLine += `<a href="${val}" target="_blank"><i class="fa-brands fa-${obj.icon}"></i> ${obj.label}</a>`;
+          } else if (obj.type == "email") {
+            infoLine += `<span><i class="fa-solid fa-${obj.icon}"></i> ${val}</span>`;
+          } else if (obj.type == "phone") {
+            infoLine += `<span><i class="fa-solid fa-${obj.icon}"></i> ${val}</span>`;
+          }
+        }
+      });
+      document.getElementById("infoInline").innerHTML = infoLine;
+      if (imgData) {
+        image.src = imgData;
+        image.style.display = "block";
+        document.getElementById("topName").style.marginTop = "0px";
+        document.getElementById("topName").style.fontSize = "20px";
+        document.getElementById("topName").style.fontWeight = "600";
+        document.getElementById("topName").style.display = "block";
+        document.getElementById("topName").style.textAlign = "center";
+        document.getElementById("topName").textContent = nameVal;
+        document.getElementById("infoInline").style.marginTop = "3px";
+      } else {
+        image.src = "";
+        image.style.display = "none";
+        document.getElementById("topName").style.marginTop = "8px";
+        document.getElementById("topName").style.display = "block";
+        document.getElementById("topName").style.textAlign = "center";
+        document.getElementById("topName").style.fontSize = "22px";
+        document.getElementById("topName").style.fontWeight = "650";
+        document.getElementById("topName").textContent = nameVal;
+        document.getElementById("infoInline").style.marginTop = "8px";
+      }
+      document.getElementById("previewTitle").textContent = document.getElementById("title").value || "";
+      // Rich Text Summary: copy as HTML
+      document.getElementById("previewSummary").innerHTML = document.getElementById("summary").value || "";
+      const cHTML = `${val("address", "location-dot")}`;
+      document.getElementById("previewContact").innerHTML = cHTML;
+      document.getElementById("previewSkills").textContent = document.getElementById("skills").value;
+      let eduHtml = "";
+      educationArr.forEach(e => { if (e && e.trim()) eduHtml += `<p>${e}</p>`; });
+      document.getElementById("previewEducation").innerHTML = eduHtml;
+      let expHtml = "";
+      experienceArr.forEach(e => { if (e && e.trim()) expHtml += `<p>${e}</p>`; });
+      document.getElementById("previewExperience").innerHTML = expHtml;
+      // Projects with links
+      let prHtml = "";
+      projectsArr.forEach(e => {
+        if ((e.desc && e.desc.trim()) || (e.link && e.link.trim())) {
+          prHtml += `<div>${e.desc || ""} <span class="project-links">${e.link ? `<a href="${e.link}" target="_blank">${e.label || "Source code"}</a>` : ""}</span></div>`;
+        }
+      });
+      document.getElementById("previewProjects").innerHTML = prHtml;
+      // Certificates
+      let certHtml = "";
+      certificateArr.forEach(e => {
+        if (e.name) {
+          certHtml += `<div class="certificate-item"><b>${e.name}</b>${e.org ? ", " + e.org : ""}${e.date ? " | " + e.date : ""}</div>`;
+        }
+      });
+      document.getElementById("previewCertificates").innerHTML = certHtml;
+    }
+    const val = (id, icon) => {
+      const v = document.getElementById(id).value;
+      return v ? `<p><i class="fa-solid fa-${icon}"></i> ${v}</p>` : "";
+    };
+    document.getElementById("saveDraft").onclick = () => {
+      const data = {};
+      inputIds.forEach(id => data[id] = document.getElementById(id).value);
+      data.summaryHTML = document.getElementById("summary").innerHTML;
+      data.educationArr = educationArr;
+      data.experienceArr = experienceArr;
+      data.projectsArr = projectsArr;
+      data.certificateArr = certificateArr;
+      data.template = document.getElementById("templateSelect").value;
+      data.profileImage = localStorage.getItem("profileImage") || '';
+      localStorage.setItem("resumeData", JSON.stringify(data));
+      alert("Draft saved successfully!");
+    };
+    // Load Draft
+    window.onload = () => {
+      const saved = JSON.parse(localStorage.getItem("resumeData") || "{}");
+      inputIds.forEach(id => { if (saved[id]) document.getElementById(id).value = saved[id]; });
+      if (saved.summaryHTML) document.getElementById("summary").innerHTML = saved.summaryHTML;
+      educationArr = Array.isArray(saved.educationArr) ? saved.educationArr : [];
+      experienceArr = Array.isArray(saved.experienceArr) ? saved.experienceArr : [];
+      projectsArr = Array.isArray(saved.projectsArr) ? saved.projectsArr : [];
+      certificateArr = Array.isArray(saved.certificateArr) ? saved.certificateArr : [];
+      renderSection("education", educationArr, "e.g., B.Tech CSE - XYZ University");
+      renderSection("experience", experienceArr, "e.g., Software Intern - ABC Corp (2022)");
+      renderSection("project", projectsArr, "");
+      renderSection("certificate", certificateArr, "");
+      if (!saved.template) {
+        document.getElementById("templateSelect").value = "classic";
+        changeResumeTemplate("classic");
+      }
+      const previewImg = document.getElementById("previewImage");
+      const imgData = saved.profileImage || localStorage.getItem("profileImage");
+      if (imgData) {
+        previewImg.src = imgData;
+        previewImg.style.display = "block";
+        localStorage.setItem("profileImage", imgData);
+      }
+      updatePreview();
+    };
+    document.getElementById("clearData").onclick = () => {
+      if (confirm("Clear all data?")) {
+        localStorage.removeItem("resumeData");
+        localStorage.removeItem("profileImage");
+        document.getElementById("resumeForm").reset();
+        document.getElementById("summary").innerHTML = "";
+        document.getElementById("previewImage").src = "";
+        document.getElementById("previewImage").style.display = "none";
+        educationArr = [];
+        experienceArr = [];
+        projectsArr = [];
+        certificateArr = [];
+        renderSection("education", educationArr, "e.g., B.Tech CSE - XYZ University");
+        renderSection("experience", experienceArr, "e.g., Software Intern - ABC Corp (2022)");
+        renderSection("project", projectsArr, "");
+        renderSection("certificate", certificateArr, "");
+        updatePreview();
+      }
+    };
+    document.getElementById("downloadPDF").onclick = async () => {
+      const resume = document.getElementById("resumeContent");
+      const { jsPDF } = window.jspdf;
+      const canvas = await html2canvas(resume, { scale: 2, backgroundColor: null });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const width = pdf.internal.pageSize.getWidth();
+      const height = (canvas.height * width) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, width, height);
+      pdf.save("Zerds_Resume.pdf");
+    };
+    document.getElementById("themeToggle").onclick = function () {
+      document.body.classList.toggle("light-mode");
+      this.textContent = document.body.classList.contains("light-mode") ? "🌞" : "🌙";
+      localStorage.setItem("siteTheme", document.body.classList.contains("light-mode") ? "light" : "dark");
+    };
+    if (localStorage.getItem("siteTheme") === "light") {
+      document.body.classList.add("light-mode");
+      document.getElementById("themeToggle").textContent = "🌞";
+    }
+  </script>
+</body>
+
+</html>
